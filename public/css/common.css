@@ -1,0 +1,180 @@
+/* rpx 动态适配 */
+html {
+  font-size: calc(100vw / 750 * 1px);
+}
+
+@media (min-width: 481px) {
+  html {
+    font-size: calc(480px / 750);
+  }
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: linear-gradient(180deg, #FFF0F3 0%, #FFE4E9 50%, #FFD6E0 100%);
+  min-height: 100vh;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+  color: #333;
+  font-size: 28rem;
+  -webkit-font-smoothing: antialiased;
+}
+
+.love-gradient {
+  background: linear-gradient(135deg, #FF6B9D 0%, #FF8FAB 50%, #FFB6C1 100%);
+}
+
+/* 页面容器 */
+.page-wrapper {
+  max-width: 480px;
+  margin: 0 auto;
+  min-height: 100vh;
+  position: relative;
+}
+
+/* 底部导航栏 */
+.nav-bar {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  background: #fff;
+  box-shadow: 0 -4rem 20rem rgba(255, 107, 157, 0.1);
+  z-index: 100;
+  padding: 10rem 0;
+}
+
+.nav-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4rem;
+  text-decoration: none;
+  color: #999;
+  transition: color 0.2s;
+}
+
+.nav-item.active {
+  color: #FF6B9D;
+}
+
+.nav-item:active {
+  transform: scale(0.95);
+}
+
+.nav-icon {
+  font-size: 40rem;
+}
+
+.nav-text {
+  font-size: 22rem;
+  white-space: nowrap;
+}
+
+/* Toast 提示 */
+.toast {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.75);
+  color: #fff;
+  padding: 20rem 40rem;
+  border-radius: 16rem;
+  font-size: 28rem;
+  z-index: 9999;
+  animation: toastIn 0.3s;
+  pointer-events: none;
+}
+
+@keyframes toastIn {
+  from { opacity: 0; transform: translate(-50%, -40%); }
+  to { opacity: 1; transform: translate(-50%, -50%); }
+}
+
+/* 自定义弹窗 */
+.modal-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.modal-box {
+  background: #fff;
+  border-radius: 24rem;
+  padding: 50rem 40rem;
+  width: 80%;
+  max-width: 350px;
+  text-align: center;
+  animation: zoomIn 0.3s;
+}
+
+@keyframes zoomIn {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.modal-title {
+  font-size: 32rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20rem;
+}
+
+.modal-content {
+  font-size: 28rem;
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 30rem;
+}
+
+.modal-btns {
+  display: flex;
+  gap: 20rem;
+}
+
+.modal-btn {
+  flex: 1;
+  padding: 20rem;
+  border-radius: 40rem;
+  font-size: 28rem;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.modal-btn:active {
+  transform: scale(0.96);
+}
+
+.modal-btn.cancel {
+  background: #F5F5F5;
+  color: #999;
+}
+
+.modal-btn.confirm {
+  background: linear-gradient(135deg, #FF6B9D, #FF8FAB);
+  color: #fff;
+}

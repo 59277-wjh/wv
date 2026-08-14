@@ -1,0 +1,17 @@
+{
+  "$schema": "https://render.com/images/deploy-to-render-button.svg",
+  "services": [
+    {
+      "type": "web",
+      "name": "love-web",
+      "env": "node",
+      "region": "singapore",
+      "plan": "free",
+      "buildCommand": "npm install",
+      "startCommand": "npm start",
+      "autoDeploy": "yes",
+      "branch": "main",
+      "healthCheckPath": "/"
+    }
+  ]
+}

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>我们的爱情</title>
+  <link rel="stylesheet" href="/css/common.css">
+  <link rel="stylesheet" href="/css/index.css">
+</head>
+<body>
+  <canvas id="heartCanvas" class="heart-canvas"></canvas>
+
+  <div class="page-wrapper">
+    <div class="container">
+      <div class="main-content">
+        <!-- 标题区 -->
+        <div class="header">
+          <div class="title-wrap">
+            <div class="title-main">我们的爱情</div>
+            <div class="title-sub">Our Love Story</div>
+          </div>
+          <div class="panda-emoji">🐼💕</div>
+        </div>
+
+        <!-- 在一起天数卡片 -->
+        <div class="days-card love-gradient" onclick="onCardTap()">
+          <span class="card-decoration heart-left">💕</span>
+          <span class="card-decoration heart-right">💕</span>
+          <div class="days-inner">
+            <div class="days-label">已经一起走过</div>
+            <div class="days-number" id="daysNumber">0</div>
+            <div class="days-unit">天</div>
+            <div class="days-today" id="daysToday"></div>
+          </div>
+        </div>
+
+        <!-- 快捷操作 -->
+        <div class="quick-actions">
+          <a href="/gallery.html" class="action-item">
+            <span class="action-icon">📷</span>
+            <span class="action-text">甜蜜动态</span>
+          </a>
+          <a href="/wish.html" class="action-item">
+            <span class="action-icon">🍰</span>
+            <span class="action-text">爱心点单</span>
+          </a>
+          <a href="/letter.html" class="action-item">
+            <span class="action-icon">💌</span>
+            <span class="action-text">写给你的信</span>
+          </a>
+          <div class="action-item" onclick="onSurprise()">
+            <span class="action-icon">🎁</span>
+            <span class="action-text">给个惊喜</span>
+          </div>
+        </div>
+
+        <!-- 我们的故事时间线 -->
+        <div class="timeline-section">
+          <div class="section-title">
+            <span class="title-icon">📖</span>
+            <span class="title-text">我们的故事</span>
+            <button class="add-story-btn" onclick="openAddStory()">
+              <span class="add-icon">+</span>
+              <span class="add-text">添加</span>
+            </button>
+          </div>
+          <div class="timeline" id="timeline"></div>
+          <div class="empty-timeline" id="emptyTimeline" style="display:none">
+            <span class="empty-icon">📝</span>
+            <span class="empty-text">还没有故事</span>
+            <span class="empty-hint">点击右上角添加你们的故事吧</span>
+          </div>
+        </div>
+
+        <!-- 每日一句情话 -->
+        <div class="daily-quote" onclick="onNextQuote()">
+          <span class="quote-mark left">"</span>
+          <span class="quote-text" id="quoteText"></span>
+          <span class="quote-mark right">"</span>
+          <span class="quote-hint">点击切换下一句 💕</span>
+        </div>
+
+        <!-- 底部 -->
+        <div class="footer">
+          <div class="footer-text">永远爱你的我 💕</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 底部导航栏 -->
+    <nav class="nav-bar">
+      <a href="/index.html" class="nav-item active">
+        <span class="nav-icon">🏠</span>
+        <span class="nav-text">首页</span>
+      </a>
+      <a href="/gallery.html" class="nav-item">
+        <span class="nav-icon">📷</span>
+        <span class="nav-text">甜蜜动态</span>
+      </a>
+      <a href="/letter.html" class="nav-item">
+        <span class="nav-icon">💌</span>
+        <span class="nav-text">写给你的信</span>
+      </a>
+    </nav>
+  </div>
+
+  <!-- 添加故事弹窗 -->
+  <div class="story-mask" id="storyMask" style="display:none">
+    <div class="story-modal">
+      <div class="modal-title">添加故事</div>
+      <div class="form-section">
+        <div class="form-label">日期</div>
+        <input type="date" id="storyDate" class="date-picker" onchange="onDateChange(event)">
+      </div>
+      <div class="form-section">
+        <div class="form-label">标题</div>
+        <input type="text" id="storyTitle" class="form-input" placeholder="给这个故事起个名字" oninput="onTitleInput(event)">
+      </div>
+      <div class="form-section">
+        <div class="form-label">描述</div>
+        <textarea id="storyDesc" class="form-textarea" placeholder="记录下这个美好的时刻..." oninput="onDescInput(event)"></textarea>
+      </div>
+      <div class="form-section">
+        <div class="form-label">图标</div>
+        <div class="icon-grid" id="iconGrid"></div>
+      </div>
+      <div class="form-section">
+        <div class="form-label">颜色</div>
+        <div class="color-grid" id="colorGrid"></div>
+      </div>
+      <div class="modal-btns">
+        <button class="modal-btn cancel" onclick="closeAddStory()">取消</button>
+        <button class="modal-btn confirm" onclick="saveStory()">保存</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 惊喜弹窗 -->
+  <div class="modal-mask" id="surpriseMask" style="display:none">
+    <div class="modal-content">
+      <div class="surprise-title">🎉 小惊喜</div>
+      <div class="surprise-emojis">
+        <span class="surprise-emoji" style="animation-delay:0s">💖</span>
+        <span class="surprise-emoji" style="animation-delay:0.05s">💕</span>
+        <span class="surprise-emoji" style="animation-delay:0.1s">💗</span>
+        <span class="surprise-emoji" style="animation-delay:0.15s">💝</span>
+        <span class="surprise-emoji" style="animation-delay:0.2s">💘</span>
+        <span class="surprise-emoji" style="animation-delay:0.25s">❤️</span>
+        <span class="surprise-emoji" style="animation-delay:0.3s">🌹</span>
+        <span class="surprise-emoji" style="animation-delay:0.35s">✨</span>
+        <span class="surprise-emoji" style="animation-delay:0.4s">🎉</span>
+        <span class="surprise-emoji" style="animation-delay:0.45s">🎁</span>
+      </div>
+      <div class="surprise-text" id="surpriseText"></div>
+      <div class="surprise-btn love-gradient" onclick="closeSurprise()">好开心 💕</div>
+    </div>
+  </div>
+
+  <script src="/js/common.js"></script>
+  <script src="/js/index.js"></script>
+</body>
+</html>

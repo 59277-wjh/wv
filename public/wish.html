@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>爱心点单</title>
+  <link rel="stylesheet" href="/css/common.css">
+  <link rel="stylesheet" href="/css/wish.css">
+</head>
+<body>
+  <div class="page-wrapper">
+    <div class="container">
+      <!-- 顶部装饰头部 -->
+      <div class="header">
+        <div class="header-bg">
+          <div class="header-title">💕 爱心点单</div>
+          <div class="header-sub">想要什么，尽管点~</div>
+        </div>
+      </div>
+
+      <!-- 菜单分类滚动条 -->
+      <div class="categories" id="categories"></div>
+
+      <!-- 菜单列表 -->
+      <div class="menu-list" id="menuList"></div>
+
+      <!-- 自定义点单区 -->
+      <div class="custom-section">
+        <div class="section-title">✨ 自定义点单</div>
+        <div class="custom-input-wrap">
+          <input class="custom-input" id="customInput" placeholder="写点想要的吧~" oninput="onCustomInput(event)">
+          <button class="custom-btn" onclick="addCustomOrder()">添加</button>
+        </div>
+      </div>
+
+      <!-- 我的订单区 -->
+      <div class="orders-section">
+        <div class="section-title">📋 我的订单 (<span id="orderCount">0</span>)</div>
+        <div class="empty-orders" id="emptyOrders">
+          <div class="empty-icon">📝</div>
+          <div class="empty-text">还没有订单哦</div>
+          <div class="empty-hint">快去点些想要的吧~</div>
+        </div>
+        <div class="order-list" id="orderList"></div>
+      </div>
+
+      <!-- 底部说明 -->
+      <div class="footer-note">
+        点单后请耐心等待接单哦~<span class="footer-heart">💕</span>
+      </div>
+    </div>
+
+    <!-- 备注弹窗 -->
+    <div class="note-mask" id="noteMask" style="display: none;" onclick="closeNoteModal()">
+      <div class="note-modal" onclick="stopPropagation(event)">
+        <div class="note-modal-title">备注一下~</div>
+        <div class="note-modal-item">
+          <span class="note-item-icon" id="noteItemIcon"></span>
+          <span class="note-item-name" id="noteItemName"></span>
+        </div>
+        <textarea class="note-textarea" id="orderNote" placeholder="有什么特别的要求吗？比如少冰、不要香菜..." maxlength="50" oninput="onNoteInput(event)"></textarea>
+        <div class="note-char-count" id="noteCharCount">0/50</div>
+        <div class="note-modal-btns">
+          <button class="note-modal-btn skip" onclick="confirmOrderWithoutNote()">不备注</button>
+          <button class="note-modal-btn confirm" onclick="confirmOrderWithNote()">确认点单</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 底部导航栏 -->
+    <div class="nav-bar">
+      <a class="nav-item" href="/index.html">
+        <span class="nav-icon">🏠</span>
+        <span class="nav-text">首页</span>
+      </a>
+      <a class="nav-item" href="/gallery.html">
+        <span class="nav-icon">📷</span>
+        <span class="nav-text">甜蜜动态</span>
+      </a>
+      <a class="nav-item" href="/letter.html">
+        <span class="nav-icon">💌</span>
+        <span class="nav-text">写给你的信</span>
+      </a>
+    </div>
+  </div>
+  <script src="/js/common.js"></script>
+  <script src="/js/wish.js"></script>
+</body>
+</html>

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>写给你的信</title>
+  <link rel="stylesheet" href="/css/common.css">
+  <link rel="stylesheet" href="/css/letter.css">
+</head>
+<body>
+  <div class="page-wrapper">
+    <div class="bg-decoration">
+      <span class="bg-heart h1">💗</span>
+      <span class="bg-heart h2">💕</span>
+      <span class="bg-heart h3">💖</span>
+      <span class="bg-heart h4">❤️</span>
+    </div>
+
+    <div class="container">
+      <div class="envelope-header">
+        <div class="envelope-icon">
+          <div class="envelope">
+            <div class="pocket"></div>
+            <div class="flap"></div>
+            <div class="seal">💌</div>
+          </div>
+        </div>
+        <div class="page-title">写给你的信</div>
+        <div class="page-sub">A Letter For You</div>
+      </div>
+
+      <div class="letter-paper">
+        <div class="paper-lines" id="paperLines"></div>
+
+        <div class="typing-indicator" id="typingIndicator">
+          <span class="dot">●</span>
+          <span class="dot">●</span>
+          <span class="dot">●</span>
+          <span class="typing-text">正在为你写信...</span>
+        </div>
+
+        <div class="paper-footer" id="paperFooter" style="display: none;">
+          <div class="signature">
+            永远爱你的人<span class="signature-heart">💕</span>
+          </div>
+          <div class="paper-stamp">
+            <div class="stamp-text">LOVE</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="replay-btn" id="replayBtn" style="display: none;" onclick="replayLetter()">
+        <span class="replay-icon">🔄</span>
+        <span class="replay-text">重新播放</span>
+      </div>
+
+      <div class="interactive-area" id="interactiveArea" style="display: none;">
+        <div class="section-divider">
+          <div class="divider-line"></div>
+          <div class="divider-text">送你一些爱心</div>
+          <div class="divider-line"></div>
+        </div>
+
+        <div class="heart-launcher">
+          <div class="launcher-title">爱心发射器</div>
+          <div class="heart-display" id="heartDisplay">0 颗爱心已送出</div>
+          <div class="launch-btns">
+            <div class="launch-btn" onclick="launchHeart(1)">
+              <span class="btn-heart">💗</span>
+              <span class="btn-count">送1颗</span>
+            </div>
+            <div class="launch-btn medium" onclick="launchHeart(5)">
+              <span class="btn-heart">💕</span>
+              <span class="btn-count">送5颗</span>
+            </div>
+            <div class="launch-btn large" onclick="launchHeart(10)">
+              <span class="btn-heart">💖</span>
+              <span class="btn-count">送10颗</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="quote-generator">
+          <div class="gen-title">情话生成器</div>
+          <div class="gen-box">
+            <div class="gen-quote" id="currentQuote"></div>
+          </div>
+          <div class="gen-btn love-gradient" onclick="nextQuote()">
+            🎲 再来一句
+          </div>
+        </div>
+
+        <div class="special-days">
+          <div class="section-title">重要日子倒计时</div>
+          <div class="days-list" id="daysList"></div>
+        </div>
+      </div>
+
+      <div class="final-love" id="finalLove" style="display: none;">
+        <div class="final-text">
+          <div class="final-main">我爱你</div>
+          <div class="final-sub">不止今天，而是每一个明天</div>
+          <div class="final-hearts">
+            <span>💗</span>
+            <span>💕</span>
+            <span>💖</span>
+            <span>💝</span>
+            <span>❤️</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="heart-rain" id="heartRain"></div>
+
+    <nav class="nav-bar">
+      <a href="/index.html" class="nav-item">
+        <span class="nav-icon">🏠</span>
+        <span class="nav-text">首页</span>
+      </a>
+      <a href="/gallery.html" class="nav-item">
+        <span class="nav-icon">📸</span>
+        <span class="nav-text">甜蜜动态</span>
+      </a>
+      <a href="/letter.html" class="nav-item active">
+        <span class="nav-icon">💌</span>
+        <span class="nav-text">写给你的信</span>
+      </a>
+    </nav>
+  </div>
+
+  <script src="/js/common.js"></script>
+  <script src="/js/letter.js"></script>
+</body>
+</html>

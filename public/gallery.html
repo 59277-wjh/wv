@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>甜蜜动态</title>
+  <link rel="stylesheet" href="/css/common.css">
+  <link rel="stylesheet" href="/css/gallery.css">
+</head>
+<body>
+  <div class="page-wrapper">
+    <div class="container">
+      <div class="header">
+        <div class="header-bg">
+          <div class="header-hearts">
+            <span class="floating-heart h1">💗</span>
+            <span class="floating-heart h2">💕</span>
+            <span class="floating-heart h3">💖</span>
+          </div>
+          <div class="header-title">甜蜜动态</div>
+          <div class="header-sub">Our Sweet Moments</div>
+        </div>
+      </div>
+
+      <div class="publish-btn" onclick="openPublish()">
+        <span class="publish-icon">✏️</span>
+        <span class="publish-text">发布新动态</span>
+      </div>
+
+      <div class="memory-list" id="memoryList"></div>
+
+      <div class="empty-state" id="emptyState" style="display: none;">
+        <div class="empty-emoji">📝</div>
+        <div class="empty-text">还没有动态哦</div>
+        <div class="empty-hint">点击上方按钮发布第一条动态吧~</div>
+      </div>
+    </div>
+
+    <div class="publish-mask" id="publishMask" style="display: none;" onclick="closePublish()">
+      <div class="publish-modal" onclick="stopPropagation(event)">
+        <div class="modal-title">发布动态</div>
+
+        <div class="input-section">
+          <div class="input-label">写点什么</div>
+          <textarea class="text-input" id="publishText" maxlength="200" placeholder="记录此刻的甜蜜心情..." oninput="onTextInput(event)"></textarea>
+          <div class="char-count" id="charCount">0/200</div>
+        </div>
+
+        <div class="cover-section">
+          <div class="input-label">选择封面</div>
+          <div class="cover-grid" id="coverGrid"></div>
+        </div>
+
+        <div class="preview-section">
+          <div class="input-label">效果预览</div>
+          <div class="preview-card">
+            <div class="preview-cover" id="previewCover">
+              <span class="preview-cover-emoji" id="previewCoverEmoji"></span>
+            </div>
+            <div class="preview-body">
+              <div class="preview-text" id="previewText">预览效果...</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-btns">
+          <button class="modal-btn cancel" onclick="closePublish()">取消</button>
+          <button class="modal-btn confirm" onclick="publishMemory()">发布</button>
+        </div>
+      </div>
+    </div>
+
+    <nav class="nav-bar">
+      <a href="/index.html" class="nav-item">
+        <span class="nav-icon">🏠</span>
+        <span class="nav-text">首页</span>
+      </a>
+      <a href="/gallery.html" class="nav-item active">
+        <span class="nav-icon">📸</span>
+        <span class="nav-text">甜蜜动态</span>
+      </a>
+      <a href="/letter.html" class="nav-item">
+        <span class="nav-icon">💌</span>
+        <span class="nav-text">写给你的信</span>
+      </a>
+    </nav>
+  </div>
+
+  <script src="/js/common.js"></script>
+  <script src="/js/gallery.js"></script>
+</body>
+</html>

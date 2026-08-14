@@ -3,13 +3,13 @@ const fs = require('fs')
 const path = require('path')
 
 const app = express()
-const PORT = process.env.PORT || 3000
 
 app.use(express.json())
 app.use(express.static(path.join(__dirname, 'public')))
 
-// 数据存储文件
-const DATA_FILE = path.join(__dirname, 'data.json')
+// 数据存储路径：Vercel 用 /tmp，本地用项目目录
+const DATA_DIR = process.env.VERCEL ? '/tmp' : __dirname
+const DATA_FILE = path.join(DATA_DIR, 'data.json')
 
 // 初始化数据
 function loadData() {
@@ -17,7 +17,7 @@ function loadData() {
     const raw = fs.readFileSync(DATA_FILE, 'utf-8')
     return JSON.parse(raw)
   } catch (e) {
-    return {
+    const initial = {
       timeline: [
         {
           id: '1',
@@ -49,18 +49,34 @@ function loadData() {
       ],
       orders: []
     }
+    saveData(initial)
+    return initial
   }
 }
 
 function saveData(data) {
-  fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2), 'utf-8')
+  try {
+    fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2), 'utf-8')
+  } catch (e) {
+    console.error('保存数据失败:', e)
+  }
 }
 
-let data = loadData()
+function getData() {
+  return loadData()
+}
+
+function updateData(updater) {
+  const data = getData()
+  updater(data)
+  saveData(data)
+  return data
+}
 
 // ==================== 时间线 API ====================
 
 app.get('/api/timeline', (req, res) => {
+  const data = getData()
   const sorted = [...data.timeline].sort((a, b) => new Date(a.date) - new Date(b.date))
   res.json(sorted)
 })
@@ -79,21 +95,22 @@ app.post('/api/timeline', (req, res) => {
     title,
     desc: desc || '一个美好的故事'
   }
-  data.timeline.push(newItem)
-  saveData(data)
+  updateData(data => data.timeline.push(newItem))
   res.json(newItem)
 })
 
 app.delete('/api/timeline/:id', (req, res) => {
   const id = req.params.id
-  data.timeline = data.timeline.filter(t => t.id !== id)
-  saveData(data)
+  updateData(data => {
+    data.timeline = data.timeline.filter(t => t.id !== id)
+  })
   res.json({ success: true })
 })
 
 // ==================== 相册动态 API ====================
 
 app.get('/api/memories', (req, res) => {
+  const data = getData()
   res.json(data.memories)
 })
 
@@ -110,27 +127,28 @@ app.post('/api/memories', (req, res) => {
     date: date || '',
     time: time || ''
   }
-  data.memories.unshift(newMemory)
-  saveData(data)
+  updateData(data => data.memories.unshift(newMemory))
   res.json(newMemory)
 })
 
 app.delete('/api/memories/:id', (req, res) => {
   const id = parseInt(req.params.id)
-  data.memories = data.memories.filter(m => m.id !== id)
-  saveData(data)
+  updateData(data => {
+    data.memories = data.memories.filter(m => m.id !== id)
+  })
   res.json({ success: true })
 })
 
 // ==================== 点单 API ====================
 
 app.get('/api/orders', (req, res) => {
+  const data = getData()
   res.json(data.orders)
 })
 
-// 获取新订单（用于通知）
 app.get('/api/orders/new', (req, res) => {
   const since = parseInt(req.query.since) || 0
+  const data = getData()
   const newOrders = data.orders.filter(o => o.createTimestamp > since && o.status === 'pending')
   res.json(newOrders)
 })
@@ -152,65 +170,42 @@ app.post('/api/orders', (req, res) => {
     note: note || '',
     createTimestamp: Date.now()
   }
-  data.orders.unshift(newOrder)
-  saveData(data)
+  updateData(data => data.orders.unshift(newOrder))
   res.json(newOrder)
 })
 
 app.put('/api/orders/:id', (req, res) => {
   const id = parseInt(req.params.id)
+  const data = updateData(d => {
+    const order = d.orders.find(o => o.id === id)
+    if (order && req.body.status) {
+      order.status = req.body.status
+    }
+  })
   const order = data.orders.find(o => o.id === id)
   if (!order) {
     return res.status(404).json({ error: '订单不存在' })
   }
-  if (req.body.status) {
-    order.status = req.body.status
-  }
-  saveData(data)
   res.json(order)
 })
 
 app.delete('/api/orders/:id', (req, res) => {
   const id = parseInt(req.params.id)
-  data.orders = data.orders.filter(o => o.id !== id)
-  saveData(data)
+  updateData(data => {
+    data.orders = data.orders.filter(o => o.id !== id)
+  })
   res.json({ success: true })
 })
 
-// ==================== 获取局域网IP ====================
+// 导出 Express app（Vercel 会自动处理）
+module.exports = app
 
-function getLocalIPs() {
-  const os = require('os')
-  const ifaces = os.networkInterfaces()
-  const ips = []
-  for (const name of Object.keys(ifaces)) {
-    for (const iface of ifaces[name]) {
-      if (iface.family === 'IPv4' && !iface.internal) {
-        ips.push(iface.address)
-      }
-    }
-  }
-  // 优先 192.168.x.x，其次 10.x.x.x，最后其他
-  const lanIP = ips.find(ip => ip.startsWith('192.168.'))
-    || ips.find(ip => ip.startsWith('10.'))
-    || ips.find(ip => !ip.startsWith('172.'))
-    || ips[0]
-  return { all: ips, lan: lanIP }
+// 本地运行时启动服务器
+if (!process.env.VERCEL) {
+  const PORT = process.env.PORT || 3000
+  app.listen(PORT, '0.0.0.0', () => {
+    console.log(`💕 爱的时光机已启动！`)
+    console.log(`   本机访问: http://localhost:${PORT}`)
+    console.log(`   按 Ctrl+C 停止`)
+  })
 }
-
-// ==================== 启动服务器 ====================
-
-const { all: allIPs, lan: lanIP } = getLocalIPs()
-
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`💕 爱的时光机已启动！`)
-  console.log(`   本机访问: http://localhost:${PORT}`)
-  if (lanIP) {
-    console.log(`   局域网访问: http://${lanIP}:${PORT}  （同一WiFi下手机/电脑）`)
-  }
-  if (allIPs.length > 1) {
-    console.log(`   所有本机IP: ${allIPs.join(', ')}`)
-  }
-  console.log(``)
-  console.log(`💡 手机访问方法：手机和电脑连同一个WiFi，然后在浏览器打开上面的 局域网访问 地址`)
-})
